@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.OrderServiceTest" tests="4" errors="0" skipped="0" failures="0" time="3.412">
+  <properties>
+    <property name="commit" value="c0ffee1"/>
+  </properties>
+  <testcase name="createsOrder" classname="com.example.OrderServiceTest" time="0.120"/>
+  <testcase name="appliesVoucher" classname="com.example.OrderServiceTest" time="0.087"/>
+  <testcase name="notifiesWarehouse" classname="com.example.OrderServiceTest" time="1.904">
+    <flakyFailure message="Connection refused: localhost:5672" type="java.net.ConnectException">
+      <stackTrace>java.net.ConnectException: Connection refused: localhost:5672
+	at com.example.Queue.connect(Queue.java:41)</stackTrace>
+    </flakyFailure>
+  </testcase>
+  <testcase name="cancelsOrder" classname="com.example.OrderServiceTest" time="0.054"/>
+</testsuite>

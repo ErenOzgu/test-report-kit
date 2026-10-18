@@ -1,0 +1,6 @@
+$ test-report-kit flaky examples/runs/before/*.xml --fail-on both
+FAILING  tests.test_payment::test_refund_partial  FFFF  signatures: ac1458b2
+FLAKY    tests.test_orders::test_concurrent_checkout  E.EE  signatures: fbc297b2
+FLAKY    tests.test_payment::test_charge_retries  .F.F  signatures: 69540622
+3 test(s) block the gate across 4 runs.
+(exit status 1)

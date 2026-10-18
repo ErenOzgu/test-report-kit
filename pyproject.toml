@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "test-report-kit"
+version = "0.1.0"
+description = "Merge JUnit XML from repeated test runs, find the flaky tests, group failures by signature and write one Markdown, HTML or JSON report. A CI gate with expiring allowlist entries. Optional AI triage whose citations are verified."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Eren Özgü" }]
+keywords = ["junit", "flaky-tests", "testing", "ci", "test-report", "pytest", "surefire"]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[project.scripts]
+test-report-kit = "test_report_kit.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["test_report_kit*"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+"test_report_kit/*" = ["E501"]
+"tests/*" = ["E501"]
+"examples/*" = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

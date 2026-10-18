@@ -1,0 +1,5 @@
+$ test-report-kit flaky examples/runs/before/*.xml --allowlist examples/allowlist.toml --today 2026-10-18
+EXPIRED  tests.test_payment::test_charge_retries  allowed until 2026-10-01 (gateway sandbox is slow; this entry has run out)
+allowed  tests.test_orders::test_concurrent_checkout  E.EE  until 2026-12-01 (sqlite lock under parallel checkout; fix planned with the move to a server database)
+1 test(s) block the gate across 4 runs.
+(exit status 1)

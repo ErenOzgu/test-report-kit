@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+  <testsuite name="pytest" timestamp="2026-10-13T09:00:00">
+    <properties><property name="commit" value="7be04d1"/></properties>
+    <testcase classname="tests.test_cart" name="test_add_item" time="0.004"/>
+    <testcase classname="tests.test_cart" name="test_total_with_discount" time="0.006"/>
+    <testcase classname="tests.test_cart" name="test_remove_item" time="0.003"/>
+    <testcase classname="tests.test_payment" name="test_charge_retries" time="0.410"/>
+    <testcase classname="tests.test_payment" name="test_refund_partial" time="0.021"/>
+    <testcase classname="tests.test_orders" name="test_concurrent_checkout" time="0.900"/>
+    <testcase classname="tests.test_orders" name="test_slow_report" time="10.100"/>
+    <testcase classname="tests.test_shipping" name="test_label_printing" time="0.000"><skipped message="needs a label printer"/></testcase>
+    <testcase classname="tests.test_search" name="test_index_rebuild" time="1.200"/>
+    <testcase classname="tests.test_search" name="test_query_ranking" time="0.300"/>
+    <testcase classname="tests.test_cart" name="test_price_rounding" time="0.002"/>
+  </testsuite>
+</testsuites>

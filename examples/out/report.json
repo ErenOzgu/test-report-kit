@@ -1,0 +1,175 @@
+{
+  "absent": [
+    {
+      "absent": 2,
+      "commit": "3f9a1c2",
+      "id": "tests.test_search::test_index_rebuild",
+      "runs": 4
+    }
+  ],
+  "failing": [
+    {
+      "commit": "3f9a1c2",
+      "fail_rate": 1.0,
+      "fails": 4,
+      "id": "tests.test_payment::test_refund_partial",
+      "median_seconds": 0.021,
+      "passes": 0,
+      "pattern": "FFFF",
+      "retried": 0,
+      "signatures": [
+        {
+          "count": 4,
+          "id": "ac1458b2"
+        }
+      ],
+      "verdict": "failing"
+    }
+  ],
+  "flaky": [
+    {
+      "commit": "3f9a1c2",
+      "fail_rate": 0.75,
+      "fails": 3,
+      "id": "tests.test_orders::test_concurrent_checkout",
+      "median_seconds": 0.9,
+      "passes": 1,
+      "pattern": "E.EE",
+      "retried": 0,
+      "signatures": [
+        {
+          "count": 3,
+          "id": "fbc297b2"
+        }
+      ],
+      "verdict": "flaky"
+    },
+    {
+      "commit": "3f9a1c2",
+      "fail_rate": 0.5,
+      "fails": 2,
+      "id": "tests.test_payment::test_charge_retries",
+      "median_seconds": 2.712,
+      "passes": 2,
+      "pattern": ".F.F",
+      "retried": 0,
+      "signatures": [
+        {
+          "count": 2,
+          "id": "69540622"
+        }
+      ],
+      "verdict": "flaky"
+    }
+  ],
+  "runs": {
+    "commit_given": true,
+    "commits": [
+      "3f9a1c2"
+    ],
+    "count": 4,
+    "duplicates": 0,
+    "labels": [
+      "run-1",
+      "run-2",
+      "run-3",
+      "run-4"
+    ]
+  },
+  "schema": 1,
+  "signatures": [
+    {
+      "count": 4,
+      "example": "def test_refund_partial():\n>       assert refund(1250, 0.5) == 1249\nE       AssertionError: assert 1250 == 1249",
+      "id": "ac1458b2",
+      "runs": 4,
+      "tests": 1,
+      "text": "AssertionError: assert N == N"
+    },
+    {
+      "count": 3,
+      "example": "sqlite3.OperationalError: database is locked",
+      "id": "fbc297b2",
+      "runs": 3,
+      "tests": 1,
+      "text": "sqlite3.OperationalError: database is locked"
+    },
+    {
+      "count": 2,
+      "example": "Traceback (most recent call last):\n  File \"/srv/ci/work/app/payment.py\", line 88, in charge\n    raise TimeoutError(...)",
+      "id": "69540622",
+      "runs": 2,
+      "tests": 1,
+      "text": "TimeoutError: payment gateway did not answer within N s (request <hex>)"
+    }
+  ],
+  "skipped": [
+    {
+      "commit": "3f9a1c2",
+      "fail_rate": 0.0,
+      "fails": 0,
+      "id": "tests.test_shipping::test_label_printing",
+      "median_seconds": 0.0,
+      "passes": 0,
+      "pattern": "ssss",
+      "retried": 0,
+      "signatures": [],
+      "verdict": "skipped"
+    }
+  ],
+  "slowest": [
+    {
+      "commit": "3f9a1c2",
+      "id": "tests.test_orders::test_slow_report",
+      "median_seconds": 4.225
+    },
+    {
+      "commit": "3f9a1c2",
+      "id": "tests.test_payment::test_charge_retries",
+      "median_seconds": 2.712
+    },
+    {
+      "commit": "3f9a1c2",
+      "id": "tests.test_search::test_index_rebuild",
+      "median_seconds": 1.2
+    },
+    {
+      "commit": "3f9a1c2",
+      "id": "tests.test_orders::test_concurrent_checkout",
+      "median_seconds": 0.9
+    },
+    {
+      "commit": "3f9a1c2",
+      "id": "tests.test_payment::test_refund_partial",
+      "median_seconds": 0.021
+    },
+    {
+      "commit": "3f9a1c2",
+      "id": "tests.test_cart::test_total_with_discount",
+      "median_seconds": 0.006
+    },
+    {
+      "commit": "3f9a1c2",
+      "id": "tests.test_cart::test_add_item",
+      "median_seconds": 0.004
+    },
+    {
+      "commit": "3f9a1c2",
+      "id": "tests.test_cart::test_remove_item",
+      "median_seconds": 0.003
+    },
+    {
+      "commit": "3f9a1c2",
+      "id": "tests.test_shipping::test_label_printing",
+      "median_seconds": 0.0
+    }
+  ],
+  "title": "Checkout service: 4 runs of one commit",
+  "totals": {
+    "failing": 1,
+    "flaky": 2,
+    "skipped": 1,
+    "stable": 5,
+    "tests": 9
+  }
+}

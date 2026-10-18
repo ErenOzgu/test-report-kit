@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+  <testsuite name="pytest" timestamp="2026-10-03T09:00:00">
+    <properties><property name="commit" value="3f9a1c2"/></properties>
+    <testcase classname="tests.test_cart" name="test_add_item" time="0.004"/>
+    <testcase classname="tests.test_cart" name="test_total_with_discount" time="0.006"/>
+    <testcase classname="tests.test_cart" name="test_remove_item" time="0.003"/>
+    <testcase classname="tests.test_payment" name="test_charge_retries" time="0.412"/>
+    <testcase classname="tests.test_payment" name="test_refund_partial" time="0.021"><failure message="AssertionError: assert 1250 == 1249">def test_refund_partial():
+&gt;       assert refund(1250, 0.5) == 1249
+E       AssertionError: assert 1250 == 1249
+</failure></testcase>
+    <testcase classname="tests.test_orders" name="test_concurrent_checkout" time="0.900"><error message="sqlite3.OperationalError: database is locked">sqlite3.OperationalError: database is locked
+</error></testcase>
+    <testcase classname="tests.test_orders" name="test_slow_report" time="4.250"/>
+    <testcase classname="tests.test_shipping" name="test_label_printing" time="0.000"><skipped message="needs a label printer"/></testcase>
+    <testcase classname="tests.test_search" name="test_index_rebuild" time="1.200"/>
+  </testsuite>
+</testsuites>

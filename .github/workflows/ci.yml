@@ -1,0 +1,110 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install ruff
+      - run: ruff check .
+      - run: ruff format --check .
+      - name: shellcheck
+        run: shellcheck examples/generate.sh
+      - name: actionlint
+        run: |
+          set -euo pipefail
+          v=1.7.7
+          base="https://github.com/rhysd/actionlint/releases/download/v${v}"
+          curl -fsSL -o "actionlint.tgz" "${base}/actionlint_${v}_linux_amd64.tar.gz"
+          curl -fsSL -o "checksums.txt" "${base}/actionlint_${v}_checksums.txt"
+          grep " actionlint_${v}_linux_amd64.tar.gz\$" checksums.txt | sed 's/ actionlint_.*/ actionlint.tgz/' | sha256sum -c -
+          tar -xzf actionlint.tgz actionlint
+          ./actionlint
+
+  test:
+    name: Tests (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -e '.[dev]'
+      - run: python -m pytest -q -rs -p no:cacheprovider
+
+  selfcheck:
+    name: Finds exactly the flaky tests of a suite built to be flaky
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e '.[dev]'
+      - name: 24 real pytest runs of examples/suite, then the report and the gate
+        run: python examples/selfcheck.py 24
+      - name: The committed example outputs are what the tool prints today
+        run: examples/generate.sh --check
+
+  wheel:
+    name: The installed command works
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build a wheel and install it into a clean environment, the way a user would
+        run: |
+          set -euo pipefail
+          pip install build
+          python -m build
+          python -m venv "$RUNNER_TEMP/clean"
+          "$RUNNER_TEMP/clean/bin/pip" install dist/*.whl
+          unzip -l dist/*.whl
+          if unzip -l dist/*.whl | grep -q "tests/"; then echo "::error::the wheel contains tests"; exit 1; fi
+      - name: The commands run from another directory
+        working-directory: ${{ runner.temp }}
+        env:
+          SRC: ${{ github.workspace }}
+        run: |
+          set -euo pipefail
+          trk="$RUNNER_TEMP/clean/bin/test-report-kit"
+          "$trk" --version
+          "$trk" report "$SRC"/examples/runs/before/*.xml --title "Checkout service: 4 runs of one commit" --format json -o report.json
+          python -c "import json; d = json.load(open('report.json')); assert d['totals']['flaky'] == 2 and d['totals']['failing'] == 1, d['totals']"
+          "$trk" report "$SRC"/examples/runs/before/*.xml --title "Checkout service: 4 runs of one commit" | diff - "$SRC/examples/out/report.md"
+          status=0
+          "$trk" flaky "$SRC"/examples/runs/before/*.xml > gate.txt || status=$?
+          test "$status" -eq 1
+          grep -q "FLAKY    tests.test_orders::test_concurrent_checkout" gate.txt
+          "$trk" flaky "$SRC"/examples/runs/before/*.xml --allowlist "$SRC/examples/allowlist.toml" --today 2026-10-18 | grep -q "EXPIRED"
+          "$trk" compare --before "$SRC"/examples/runs/before/*.xml --after "$SRC"/examples/runs/after/*.xml | diff - "$SRC/examples/out/compare.md"
+          status=0
+          "$trk" flaky "$SRC"/examples/runs/surefire/*.xml 2> one.txt || status=$?
+          test "$status" -eq 2
+          grep -q "at least 2 runs" one.txt
+          status=0
+          "$trk" report missing.xml 2> missing.txt || status=$?
+          test "$status" -eq 2
+          grep -q "cannot read" missing.txt

@@ -1,0 +1,11 @@
+# Known flaky tests the `flaky` gate lets through for now. Every entry needs an end date and a reason.
+
+[[allow]]
+test = "tests.test_orders::test_concurrent_checkout"
+until = 2026-12-01
+reason = "sqlite lock under parallel checkout; fix planned with the move to a server database"
+
+[[allow]]
+test = "tests.test_payment::test_charge_*"
+until = 2026-10-01
+reason = "gateway sandbox is slow; this entry has run out"
