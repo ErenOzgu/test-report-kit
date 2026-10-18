@@ -98,7 +98,11 @@ jobs:
           "$trk" flaky "$SRC"/examples/runs/before/*.xml > gate.txt || status=$?
           test "$status" -eq 1
           grep -q "FLAKY    tests.test_orders::test_concurrent_checkout" gate.txt
-          "$trk" flaky "$SRC"/examples/runs/before/*.xml --allowlist "$SRC/examples/allowlist.toml" --today 2026-10-18 | grep -q "EXPIRED"
+          status=0
+          "$trk" flaky "$SRC"/examples/runs/before/*.xml --allowlist "$SRC/examples/allowlist.toml" --today 2026-10-18 > allow.txt || status=$?
+          test "$status" -eq 1
+          grep -q "EXPIRED  tests.test_payment::test_charge_retries" allow.txt
+          grep -q "allowed  tests.test_orders::test_concurrent_checkout" allow.txt
           "$trk" compare --before "$SRC"/examples/runs/before/*.xml --after "$SRC"/examples/runs/after/*.xml | diff - "$SRC/examples/out/compare.md"
           status=0
           "$trk" flaky "$SRC"/examples/runs/surefire/*.xml 2> one.txt || status=$?
